@@ -1,0 +1,5 @@
+.headerRule {
+  height: 2px;
+  background: linear-gradient(to right, transparent, var(--accent), transparent);
+  margin: 10px 0 8px;
+}

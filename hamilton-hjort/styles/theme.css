@@ -1,0 +1,21 @@
+:root {
+  /* Skift farver her for “andre farver” men samme design */
+  --bg: #fbfaf7;
+  --surface: #f3efe7;
+  --text: #141414;
+  --muted: #6a6a6a;
+
+  --brand: #2f3a2f;     /* logo/overskrifter */
+  --accent: #b06b3a;    /* linjer, små highlights */
+  --cta: #2f6f73;       /* knapper */
+  --ctaText: #ffffff;
+
+  --footerBg: #2d2a27;
+  --footerText: #efe7de;
+
+  --cardBorder: #e0d6c8;
+  --shadow: 0 8px 24px rgba(0,0,0,0.08);
+
+  --container: 1100px;
+  --radius: 18px;
+}

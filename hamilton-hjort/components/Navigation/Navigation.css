@@ -1,0 +1,45 @@
+.navbar {
+  background: var(--bg);
+  padding: 16px 0 8px;
+}
+
+.navbarInner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.navBrand {
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 26px;
+  letter-spacing: 1px;
+  color: var(--brand);
+}
+
+.navLinks {
+  display: flex;
+  gap: 18px;
+  align-items: center;
+}
+
+.navLink {
+  font-size: 14px;
+  color: var(--muted);
+  padding: 8px 10px;
+  border-radius: 999px;
+}
+
+.navLink.active {
+  color: var(--text);
+  background: var(--surface);
+}
+
+.navIcon {
+  background: var(--surface);
+}
+
+@media (max-width: 520px) {
+  .navLinks {
+    gap: 8px;
+  }
+}
