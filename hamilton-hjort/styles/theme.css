@@ -1,21 +1,27 @@
-:root {
-  /* Skift farver her for “andre farver” men samme design */
-  --bg: #fbfaf7;
-  --surface: #f3efe7;
-  --text: #141414;
-  --muted: #6a6a6a;
+:root{
+  /* Base */
+  --bg: #eef2ee;          /* lys grønlig baggrund */
+  --text: #101612;
+  --muted: #5b6a5f;
 
-  --brand: #2f3a2f;     /* logo/overskrifter */
-  --accent: #b06b3a;    /* linjer, små highlights */
-  --cta: #2f6f73;       /* knapper */
+  /* Surfaces */
+  --surface: #f8faf8;     /* cards / indhold */
+  --surface2: #e4ece4;    /* sektion baggrund (gallery feel) */
+  --surface3: #d4e2d6;    /* ekstra flade */
+
+  /* Brand / accent */
+  --brand: #183023;       /* logo/overskrifter */
+  --accent: #3a7c5a;      /* underline/linjer */
+  --cta: #2f6f73;         /* knap (kan også være grøn: #2f6a4b) */
   --ctaText: #ffffff;
 
-  --footerBg: #2d2a27;
-  --footerText: #efe7de;
+  /* Footer */
+  --footerBg: #173024;    /* mørk grøn */
+  --footerText: #eef6f0;
 
-  --cardBorder: #e0d6c8;
-  --shadow: 0 8px 24px rgba(0,0,0,0.08);
-
+  /* UI */
+  --cardBorder: rgba(16,22,18,0.14);
+  --shadow: 0 10px 26px rgba(0,0,0,0.10);
   --container: 1100px;
   --radius: 18px;
 }
