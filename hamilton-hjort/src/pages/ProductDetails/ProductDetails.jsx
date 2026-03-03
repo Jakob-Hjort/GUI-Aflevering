@@ -4,28 +4,31 @@ import { getProduct, imgSrc } from "../../api/shopApi";
 import "./ProductDetails.css";
 
 export default function ProductDetails() {
-  // :id fra URL (/products/:id)
   const { id } = useParams();
 
-  // Data-state
   const [product, setProduct] = useState(null);
   const [activeImg, setActiveImg] = useState("");
-
-  // UI-state (kun loading)
   const [loading, setLoading] = useState(true);
 
-  // Hent produktet når id ændrer sig
   useEffect(() => {
-    setLoading(true);
+    async function load() {
+      setLoading(true);
 
-    getProduct(id).then((data) => {
-      setProduct(data);
-      setActiveImg(data?.imageUrls?.[0] || "");
-      setLoading(false);
-    });
+      try {
+        const data = await getProduct(id);
+        setProduct(data);
+        setActiveImg(data?.imageUrls?.[0] || "");
+      } catch (e) {
+        console.error(e);
+        setProduct(null);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    load();
   }, [id]);
 
-  // Loading UI
   if (loading) {
     return (
       <div className="container">
@@ -34,7 +37,6 @@ export default function ProductDetails() {
     );
   }
 
-  // Hvis produktet ikke findes (eller API returnerer null)
   if (!product) {
     return (
       <div className="container">
@@ -69,7 +71,6 @@ export default function ProductDetails() {
                 )}
               </div>
 
-              {/* Thumbnail row (kun hvis der er flere billeder) */}
               {images.length > 1 && (
                 <div className="pdThumbRow">
                   {images.map((u) => (
@@ -86,7 +87,6 @@ export default function ProductDetails() {
               )}
             </div>
 
-            {/* Højre side: info */}
             <div className="pdInfo">
               <p className="smallLabel">{product.categoryTitle}</p>
               <h1 className="pdTitle">{product.title}</h1>
