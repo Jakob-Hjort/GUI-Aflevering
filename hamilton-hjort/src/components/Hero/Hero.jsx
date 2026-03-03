@@ -1,9 +1,6 @@
 import { Link } from "react-router-dom";
 import "./Hero.css";
 
-
-// Hero er en genbrugelig "top-sektion" til en side.
-// Vi bruger props til at gøre den fleksibel.
 export default function Hero({ title, subtitle }) {
   return (
     <section className="hero">

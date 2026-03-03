@@ -13,7 +13,6 @@ export default function Home() {
 
   // ---------- useEffect uden dependency: kør kun én gang ved load ----------
   useEffect(() => {
-    // Vi henter 3 produkter som vises på forsiden
     getProducts(1, 3)
       .then((data) => setFeatured(data.items))
       .catch((e) => setErr(e.message));
@@ -22,7 +21,7 @@ export default function Home() {
   // ---------- Render ----------
   return (
     <>
-      {/* HERO: mere content på forsiden */}
+
       <Hero
         title="Velkommen til vores webshop"
         subtitle="Se udvalgte produkter herunder – eller hop direkte til alle produkter."
@@ -32,18 +31,16 @@ export default function Home() {
       <div className="container">
         <h2 className="sectionTitle">Nyheder og populære produkter</h2>
 
-        {/* Hvis der er fejl, viser vi den */}
         {err && <p>{err}</p>}
       </div>
 
       <div className="sectionBox">
         <div className="container sectionBoxInner">
-          {/* Hvis ingen fejl, viser vi product-grid */}
+
           {!err && <ProductGrid products={featured} variant="featured" />}
         </div>
       </div>
 
-      {/* Ekstra content-sektion (unikt indhold som i materialet) */}
       <div className="container" style={{ paddingBottom: 60 }}>
         <h3 className="sectionTitle">Sådan fungerer shoppen</h3>
         <p>

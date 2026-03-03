@@ -26,8 +26,6 @@ export default function Products() {
     getCategories()
       .then((cats) => setCategories(cats))
       .catch((e) => {
-        // Hvis kategorier fejler, kan vi stadig vise produkter,
-        // så vi gemmer bare fejlen hvis du vil vise den.
         setErr(e.message);
       });
   }, []);
@@ -72,14 +70,12 @@ export default function Products() {
           </p>
         )}
 
-        {/* Loading + fejl */}
         {loading && <p>Loading...</p>}
         {err && <p>{err}</p>}
       </div>
 
       <div className="sectionBox">
         <div className="container sectionBoxInner">
-          {/* Vi viser kun grid når vi har data og ingen fejl */}
           {!loading && !err && <ProductGrid products={products} />}
         </div>
       </div>

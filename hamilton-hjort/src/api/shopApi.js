@@ -10,7 +10,6 @@ export function imgSrc(url) {
 function fetchJson(path) {
   return fetch(`${API}${path}`).then((res) => {
     if (!res.ok) {
-      // Hvis serveren svarer med fejl, kaster vi en Error
       throw new Error(`HTTP ${res.status}`);
     }
     return res.json();

@@ -21,12 +21,12 @@
   font-size: 12px;
   color: rgba(255, 255, 255, 0.80);
   padding: 6px 0;
-  border-bottom: 2px solid transparent; /* <- her */
+  border-bottom: 2px solid transparent;
 }
 
 .tab.active {
   color: var(--footerText);
-  border-bottom-color: var(--accent);   /* <- kun active får stregen */
+  border-bottom-color: var(--accent);  
 }
 
 .tab:hover {
