@@ -1,99 +1,85 @@
-import { useEffect, useMemo, useState } from "react";
-import { useSearchParams } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+
 import ProductGrid from "../../components/ProductGrid/ProductGrid";
-import { getCategories, getProducts, getProductsByCategory } from "../../api/shopApi";
+import {
+  getCategories,
+  getProducts,
+  getProductsByCategory,
+} from "../../api/shopApi";
 
 export default function Products() {
-  const [searchParams] = useSearchParams();
-  const categoryId = searchParams.get("category"); 
+  // categoryId kommer fra URL'en når vi er på /products/category/:categoryId
+  // Hvis vi er på /products, så er categoryId = undefined
+  const { categoryId } = useParams();
 
+  // ---------- State (data) ----------
   const [products, setProducts] = useState([]);
-  const [allProducts, setAllProducts] = useState([]);
   const [categories, setCategories] = useState([]);
 
-  const [err, setErr] = useState("");
+  // ---------- State (UI) ----------
   const [loading, setLoading] = useState(true);
+  const [err, setErr] = useState("");
 
-  // load categories + all products (for counts)
+  // ---------- Effect 1: hent kategorier én gang (så vi kan vise titel) ----------
   useEffect(() => {
-    let cancelled = false;
-
-    async function loadBase() {
-      try {
-        const [cats, all] = await Promise.all([
-          getCategories(),
-          getProducts(1, 500),
-        ]);
-        if (cancelled) return;
-        setCategories(cats);
-        setAllProducts(all.items);
-      } catch (e) {
-        if (!cancelled) setErr(e.message);
-      }
-    }
-
-    loadBase();
-    return () => (cancelled = true);
+    getCategories()
+      .then((cats) => setCategories(cats))
+      .catch((e) => {
+        // Hvis kategorier fejler, kan vi stadig vise produkter,
+        // så vi gemmer bare fejlen hvis du vil vise den.
+        setErr(e.message);
+      });
   }, []);
 
-  // load products shown (filtered or all)
+  // ---------- Effect 2: hent produkter (kører igen når categoryId ændrer sig) ----------
   useEffect(() => {
-    let cancelled = false;
+    setLoading(true);
+    setErr("");
 
-    async function load() {
-      try {
-        setLoading(true);
-        setErr("");
-
-        if (categoryId) {
-          const items = await getProductsByCategory(categoryId);
-          if (!cancelled) setProducts(items);
-        } else {
-          const data = await getProducts(1, 50);
-          if (!cancelled) setProducts(data.items);
-        }
-      } catch (e) {
-        if (!cancelled) setErr(e.message);
-      } finally {
-        if (!cancelled) setLoading(false);
-      }
+    // Hvis categoryId findes, henter vi produkter for en kategori
+    if (categoryId) {
+      getProductsByCategory(categoryId)
+        .then((items) => setProducts(items))
+        .catch((e) => setErr(e.message))
+        .finally(() => setLoading(false));
+      return;
     }
 
-    load();
-    return () => (cancelled = true);
+    // Ellers henter vi alle produkter (side 1, 50 stk)
+    getProducts(1, 50)
+      .then((data) => setProducts(data.items))
+      .catch((e) => setErr(e.message))
+      .finally(() => setLoading(false));
   }, [categoryId]);
 
-  // counts pr kategori
-  const counts = useMemo(() => {
-    const map = new Map(); // categoryId -> count
-    for (const p of allProducts) {
-      map.set(p.categoryId, (map.get(p.categoryId) || 0) + 1);
-    }
-    return map;
-  }, [allProducts]);
+  // ---------- Hjælpe-tekst: hvilken kategori er valgt? ----------
+  const selectedCategoryTitle = categoryId
+    ? categories.find((c) => String(c.id) === String(categoryId))?.title ||
+      "Kategori"
+    : "Alle";
 
-  const selectedCategoryTitle =
-    categoryId && categories.length
-      ? categories.find((c) => String(c.id) === String(categoryId))?.title
-      : "Alle";
-
+  // ---------- Render ----------
   return (
     <>
       <div className="container">
         <h1 className="sectionTitle">Produkter</h1>
 
+        {/* Viser info når data er loaded */}
         {!loading && !err && (
           <p className="smallLabel">
             {selectedCategoryTitle} — {products.length} produkter
           </p>
         )}
 
+        {/* Loading + fejl */}
         {loading && <p>Loading...</p>}
         {err && <p>{err}</p>}
       </div>
 
       <div className="sectionBox">
         <div className="container sectionBoxInner">
+          {/* Vi viser kun grid når vi har data og ingen fejl */}
           {!loading && !err && <ProductGrid products={products} />}
         </div>
       </div>

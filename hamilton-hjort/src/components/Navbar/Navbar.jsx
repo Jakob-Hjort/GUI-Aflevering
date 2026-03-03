@@ -1,49 +1,41 @@
 import { useEffect, useState } from "react";
-import { NavLink, useLocation, useSearchParams } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { getCategories } from "../../api/shopApi";
 import "./Navbar.css";
 
 export default function Navbar() {
+  // State til kategorierne vi henter fra API'et
   const [cats, setCats] = useState([]);
-  const [searchParams] = useSearchParams();
-  const location = useLocation();
 
-  const activeCategory = searchParams.get("category"); // string | null
-  const onHome = location.pathname === "/";
-  const onProducts = location.pathname === "/products";
-
+  // useEffect uden dependency ([]) betyder: kør én gang når componenten loader
   useEffect(() => {
-    getCategories().then(setCats).catch(() => {});
+    // Hent kategorier fra API'et
+    getCategories()
+      .then((data) => setCats(data))
+      .catch(() => {
+        // Vi viser ikke fejl i navbaren - så den bare kan rende videre.
+      });
   }, []);
-
-  const cls = (active) => (active ? "tab active" : "tab");
 
   return (
     <div className="navbar">
       <div className="navbarTabsBar">
         <nav className="navbarTabs">
-          {/* Home */}
-          <NavLink to="/" className={() => cls(onHome)}>
+          {/* Link til forsiden */}
+          <Link className="tab" to="/">
             Home
-          </NavLink>
+          </Link>
 
-          {/* Alle produkter (kun aktiv på /products uden category) */}
-          <NavLink
-            to="/products"
-            className={() => cls(onProducts && !activeCategory)}
-          >
+          {/* Link til alle produkter */}
+          <Link className="tab" to="/products">
             Alle produkter
-          </NavLink>
+          </Link>
 
-          {/* Kategorier (kun aktiv på /products?category=ID) */}
+          {/* Links til produkter i en bestemt kategori */}
           {cats.map((c) => (
-            <NavLink
-              key={c.id}
-              to={`/products?category=${c.id}`}
-              className={() => cls(onProducts && activeCategory === String(c.id))}
-            >
+            <Link key={c.id} className="tab" to={`/products/category/${c.id}`}>
               {c.title}
-            </NavLink>
+            </Link>
           ))}
         </nav>
       </div>

@@ -1,0 +1,11 @@
+/* Layout som går igen på alle sider (SPA) */
+
+.appShell {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.appMain {
+  flex: 1;
+}

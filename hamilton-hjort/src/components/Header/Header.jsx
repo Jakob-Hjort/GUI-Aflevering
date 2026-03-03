@@ -1,23 +1,19 @@
-import { NavLink, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import "./Header.css";
 
 export default function Header() {
-  const navigate = useNavigate();
-
   return (
     <header className="topHeader">
       <div className="container topHeaderInner">
-        <NavLink to="/" className="topHeaderBrand">
+        {/* Link til forsiden */}
+        <Link to="/" className="topHeaderBrand">
           HAMILTON-HJORT
-        </NavLink>
+        </Link>
 
-        <button
-          className="topHeaderCart"
-          aria-label="Cart"
-          onClick={() => navigate("/products")}
-        >
+        {/* Link til products (ikon-knap) */}
+        <Link className="topHeaderCart" aria-label="Cart" to="/products">
           🛒
-        </button>
+        </Link>
       </div>
     </header>
   );
