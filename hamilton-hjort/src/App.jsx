@@ -1,16 +1,18 @@
 import { Routes, Route } from "react-router-dom";
+import Header from "./components/Header/Header";
 import Navbar from "./components/Navbar/Navbar";
+import Footer from "./components/Footer/Footer";
 import Home from "./pages/Home";
 import Products from "./pages/Products/Products";
 import ProductDetails from "./pages/ProductDetails/ProductDetails";
 import Admin from "./pages/Admin/Admin";
-import Footer from "./components/Footer/Footer";
 
 export default function App() {
   return (
-    <>
+    <div className="appShell">
+      <Header />
       <Navbar />
-      <main className="container" style={{ paddingTop: 16 }}>
+      <main className="appMain">
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/products" element={<Products />} />
@@ -19,6 +21,6 @@ export default function App() {
         </Routes>
       </main>
       <Footer />
-    </>
+    </div>
   );
 }

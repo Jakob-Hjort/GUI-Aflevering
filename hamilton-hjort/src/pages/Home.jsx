@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import ProductGrid from "../components/ProductGrid/ProductGrid";
 import { getProducts } from "../api/shopApi";
-import Header from "../components/Header/Header"; // hvis din Header findes her
 
 export default function Home() {
   const [featured, setFeatured] = useState([]);
@@ -15,10 +14,16 @@ export default function Home() {
 
   return (
     <>
-      <Header /> {/* behold hero/banner kun her */}
-      <h2>Nyheder og populære produkter</h2>
-      {err && <p>{err}</p>}
-      {!err && <ProductGrid products={featured} />}
+      <div className="container">
+        <h2 className="sectionTitle">Nyheder og populære produkter</h2>
+        {err && <p>{err}</p>}
+      </div>
+
+      <div className="sectionBox">
+        <div className="container sectionBoxInner">
+          {!err && <ProductGrid products={featured} variant="featured" />}
+        </div>
+      </div>
     </>
   );
 }

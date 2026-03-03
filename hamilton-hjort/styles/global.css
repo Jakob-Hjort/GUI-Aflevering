@@ -18,7 +18,7 @@ body{
   margin: 14px auto 0;
 
   /* gør at den ikke føles som “hele siden” */
-  max-width: calc(var(--container) + 32px);
+  max-width: calc(var(--container) + 10px);
   box-shadow: var(--shadow);
 }
 

@@ -1,12 +1,14 @@
- import { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import { getProduct, imgSrc } from "../../api/shopApi";
+import "./ProductDetails.css";
 
 export default function ProductDetails() {
   const { id } = useParams();
   const [product, setProduct] = useState(null);
   const [err, setErr] = useState("");
   const [loading, setLoading] = useState(true);
+  const [activeImg, setActiveImg] = useState("");
 
   useEffect(() => {
     let cancelled = false;
@@ -16,7 +18,11 @@ export default function ProductDetails() {
         setLoading(true);
         setErr("");
         const data = await getProduct(id);
-        if (!cancelled) setProduct(data);
+        if (cancelled) return;
+
+        setProduct(data);
+        const first = data?.imageUrls?.[0] || "";
+        setActiveImg(first);
       } catch (e) {
         if (!cancelled) setErr(e.message);
       } finally {
@@ -28,53 +34,63 @@ export default function ProductDetails() {
     return () => (cancelled = true);
   }, [id]);
 
-  if (loading) return <p>Loading...</p>;
-  if (err) return <p>{err}</p>;
-  if (!product) return <p>Not found</p>;
+  if (loading) return <div className="container"><p>Loading...</p></div>;
+  if (err) return <div className="container"><p>{err}</p></div>;
+  if (!product) return <div className="container"><p>Not found</p></div>;
 
   const images = product.imageUrls || [];
 
   return (
-    <div>
-      <Link to="/products">← Go back</Link>
+    <>
+      <div className="container">
+        <Link to="/products" className="backLink">← Go back</Link>
+      </div>
 
-      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 24, marginTop: 16 }}>
-        <div>
-          {images.length > 0 ? (
-            <img
-              src={imgSrc(images[0])}
-              alt={product.title}
-              style={{ width: "100%", maxWidth: 480, aspectRatio: "3/4", objectFit: "cover" }}
-            />
-          ) : (
-            <div style={{ width: "100%", maxWidth: 480, aspectRatio: "3/4", background: "#eee" }} />
-          )}
+      <div className="sectionBox">
+        <div className="container sectionBoxInner">
+          <div className="pdLayout">
+            <div>
+              <div className="pdMainImageFrame">
+                {activeImg ? (
+                  <img
+                    className="pdMainImage"
+                    src={imgSrc(activeImg)}
+                    alt={product.title}
+                  />
+                ) : (
+                  <div className="pdPlaceholder" />
+                )}
+              </div>
 
-          {images.length > 1 && (
-            <div style={{ display: "flex", gap: 8, marginTop: 12, flexWrap: "wrap" }}>
-              {images.slice(1).map((u) => (
-                <img
-                  key={u}
-                  src={imgSrc(u)}
-                  alt={product.title}
-                  style={{ width: 90, height: 90, objectFit: "cover" }}
-                />
-              ))}
+              {images.length > 1 && (
+                <div className="pdThumbRow">
+                  {images.map((u) => (
+                    <button
+                      key={u}
+                      type="button"
+                      className={`pdThumb ${u === activeImg ? "active" : ""}`}
+                      onClick={() => setActiveImg(u)}
+                    >
+                      <img src={imgSrc(u)} alt={product.title} />
+                    </button>
+                  ))}
+                </div>
+              )}
             </div>
-          )}
-        </div>
 
-        <div>
-          <p style={{ opacity: 0.8 }}>{product.categoryTitle}</p>
-          <h1 style={{ marginTop: 4 }}>{product.title}</h1>
-          <p style={{ fontWeight: 600 }}>kr. {Number(product.price).toFixed(2)}</p>
+            <div className="pdInfo">
+              <p className="smallLabel">{product.categoryTitle}</p>
+              <h1 className="pdTitle">{product.title}</h1>
+              <p className="pdPrice">kr. {Number(product.price).toFixed(2)}</p>
 
-          <button style={{ padding: "10px 14px", margin: "12px 0" }}>Add to cart</button>
+              <button className="pdBtn" type="button">Add to cart</button>
 
-          <h3>Description</h3>
-          <p>{product.description}</p>
+              <h3 className="pdH3">Description</h3>
+              <p className="pdDesc">{product.description}</p>
+            </div>
+          </div>
         </div>
       </div>
-    </div>
+    </>
   );
 }

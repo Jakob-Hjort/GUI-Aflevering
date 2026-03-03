@@ -1,5 +1,29 @@
-.headerRule {
-  height: 2px;
-  background: linear-gradient(to right, transparent, var(--accent), transparent);
-  margin: 10px 0 8px;
+.topHeader {
+  background: var(--bg);              /* beholder den lyse farve */
+  border-bottom: 1px solid var(--cardBorder);
+}
+
+.topHeaderInner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 16px;
+}
+
+.topHeaderBrand {
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 30px;
+  letter-spacing: 1px;
+  color: var(--brand);
+}
+
+.topHeaderCart {
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+  font-size: 18px;
+  color: var(--muted);
+}
+.topHeaderCart:hover {
+  color: var(--brand);
 }
