@@ -18,7 +18,6 @@ export default function Home() {
       .catch((e) => setErr(e.message));
   }, []);
 
-  // ---------- Render ----------
   return (
     <>
 
