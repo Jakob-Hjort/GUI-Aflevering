@@ -4,57 +4,45 @@ import { getProduct, imgSrc } from "../../api/shopApi";
 import "./ProductDetails.css";
 
 export default function ProductDetails() {
-  // useParams() giver os :id fra URL'en (/products/:id)
+  // :id fra URL (/products/:id)
   const { id } = useParams();
 
-  // ---------- State til data ----------
+  // Data-state
   const [product, setProduct] = useState(null);
   const [activeImg, setActiveImg] = useState("");
 
-  // ---------- State til UI ----------
+  // UI-state (kun loading)
   const [loading, setLoading] = useState(true);
-  const [err, setErr] = useState("");
 
-  // ---------- Hent produktet når id ændrer sig ----------
+  // Hent produktet når id ændrer sig
   useEffect(() => {
     setLoading(true);
-    setErr("");
 
-    getProduct(id)
-      .then((data) => {
-        setProduct(data);
-
-        // Vælg første billede som "aktivt" billede
-        const first = data?.imageUrls?.[0] || "";
-        setActiveImg(first);
-      })
-      .catch((e) => setErr(e.message))
-      .finally(() => setLoading(false));
+    getProduct(id).then((data) => {
+      setProduct(data);
+      setActiveImg(data?.imageUrls?.[0] || "");
+      setLoading(false);
+    });
   }, [id]);
 
-  // ---------- Render: loading / error / not found ----------
-  if (loading)
+  // Loading UI
+  if (loading) {
     return (
       <div className="container">
         <p>Loading...</p>
       </div>
     );
+  }
 
-  if (err)
-    return (
-      <div className="container">
-        <p>{err}</p>
-      </div>
-    );
-
-  if (!product)
+  // Hvis produktet ikke findes (eller API returnerer null)
+  if (!product) {
     return (
       <div className="container">
         <p>Not found</p>
       </div>
     );
+  }
 
-  // ---------- Render: selve produktet ----------
   const images = product.imageUrls || [];
 
   return (

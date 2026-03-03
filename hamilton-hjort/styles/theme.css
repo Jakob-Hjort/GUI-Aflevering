@@ -12,11 +12,11 @@
   /* Brand / accent */
   --brand: #183023;       /* logo/overskrifter */
   --accent: #3a7c5a;      /* underline/linjer */
-  --cta: #2f6f73;         /* knap (kan også være grøn: #2f6a4b) */
+  --cta: #2f6f73;         
   --ctaText: #ffffff;
 
   /* Footer */
-  --footerBg: #173024;    /* mørk grøn */
+  --footerBg: #173024;    
   --footerText: #eef6f0;
 
   /* UI */

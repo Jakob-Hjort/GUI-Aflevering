@@ -9,7 +9,6 @@ export default function App() {
 
     <MainLayout>
       <Routes>
-
         <Route path="/" element={<Home />} />
 
         <Route path="/products" element={<Products />} />

@@ -5,7 +5,7 @@ import ProductGrid from "../components/ProductGrid/ProductGrid";
 import { getProducts } from "../api/shopApi";
 
 export default function Home() {
-  // ---------- State til "featured" produkter ----------
+  
   const [featured, setFeatured] = useState([]);
 
   // ---------- State til fejlbesked ----------
@@ -38,14 +38,6 @@ export default function Home() {
 
           {!err && <ProductGrid products={featured} variant="featured" />}
         </div>
-      </div>
-
-      <div className="container" style={{ paddingBottom: 60 }}>
-        <h3 className="sectionTitle">Sådan fungerer shoppen</h3>
-        <p>
-          Vælg en kategori i navigationen, se produkterne på products-siden, og klik
-          ind på et produkt for at se detaljer på single product-siden.
-        </p>
       </div>
     </>
   );

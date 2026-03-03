@@ -1,82 +1,52 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-
 import ProductGrid from "../../components/ProductGrid/ProductGrid";
-import {
-  getCategories,
-  getProducts,
-  getProductsByCategory,
-} from "../../api/shopApi";
+import { getCategories, getProducts, getProductsByCategory } from "../../api/shopApi";
 
 export default function Products() {
-  // categoryId kommer fra URL'en når vi er på /products/category/:categoryId
-  // Hvis vi er på /products, så er categoryId = undefined
   const { categoryId } = useParams();
 
-  // ---------- State (data) ----------
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
 
-  // ---------- State (UI) ----------
-  const [loading, setLoading] = useState(true);
-  const [err, setErr] = useState("");
-
-  // ---------- Effect 1: hent kategorier én gang (så vi kan vise titel) ----------
   useEffect(() => {
-    getCategories()
-      .then((cats) => setCategories(cats))
-      .catch((e) => {
-        setErr(e.message);
-      });
+    getCategories().then(setCategories);
   }, []);
 
-  // ---------- Effect 2: hent produkter (kører igen når categoryId ændrer sig) ----------
   useEffect(() => {
-    setLoading(true);
-    setErr("");
-
-    // Hvis categoryId findes, henter vi produkter for en kategori
     if (categoryId) {
-      getProductsByCategory(categoryId)
-        .then((items) => setProducts(items))
-        .catch((e) => setErr(e.message))
-        .finally(() => setLoading(false));
+      getProductsByCategory(categoryId).then(setProducts);
       return;
     }
 
-    // Ellers henter vi alle produkter (side 1, 50 stk)
-    getProducts(1, 50)
-      .then((data) => setProducts(data.items))
-      .catch((e) => setErr(e.message))
-      .finally(() => setLoading(false));
+    getProducts(1, 50).then((data) => setProducts(data.items));
   }, [categoryId]);
 
-  // ---------- Hjælpe-tekst: hvilken kategori er valgt? ----------
   const selectedCategoryTitle = categoryId
-    ? categories.find((c) => String(c.id) === String(categoryId))?.title ||
-      "Kategori"
+    ? categories.find((c) => String(c.id) === String(categoryId))?.title || "Kategori"
     : "Alle";
 
-  // ---------- Render ----------
+  if (!products.length) {
+    return (
+      <div className="container">
+        <h1 className="sectionTitle">Produkter</h1>
+        <p>Henter produkter...</p>
+      </div>
+    );
+  }
+
   return (
     <>
       <div className="container">
         <h1 className="sectionTitle">Produkter</h1>
-
-        {/* Viser info når data er loaded */}
-        {!loading && !err && (
-          <p className="smallLabel">
-            {selectedCategoryTitle} — {products.length} produkter
-          </p>
-        )}
-
-        {loading && <p>Loading...</p>}
-        {err && <p>{err}</p>}
+        <p className="smallLabel">
+          {selectedCategoryTitle} — {products.length} produkter
+        </p>
       </div>
 
       <div className="sectionBox">
         <div className="container sectionBoxInner">
-          {!loading && !err && <ProductGrid products={products} />}
+          <ProductGrid products={products} />
         </div>
       </div>
     </>
